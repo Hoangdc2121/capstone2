@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+    <!-- link css -->
+    <link rel="stylesheet" href="./css/main.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header-inner">
+        <a href="./index.html" class="header-logo"> SNEAKER HUB </a>
+        <nav class="header-nav">
+          <ul class="header-menu">
+            <li>
+              <a href="./about.html" class="header-link">About</a>
+            </li>
+            <li>
+              <a href="./admin.html" class="header-link active">Admin</a>
+            </li>
+            <li>
+              <a href="./stores.html" class="header-link">Stores</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="product-management">
+        <div class="container">
+          <!-- Tiêu đề và nút thêm -->
+          <div class="product-header">
+            <div class="product-heading">
+              <h1 class="product-title">Quản lý sản phẩm</h1>
+
+              <p class="product-description">
+                Thêm, chỉnh sửa và quản lý sản phẩm của SNEAKER HUB.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              class="btn-add"
+              id="btnAddProduct"
+              onclick="openCreateProductModal()"
+            >
+              <i class="fa-solid fa-plus"></i>
+              <span>Thêm sản phẩm</span>
+            </button>
+          </div>
+
+          <!-- Danh sách sản phẩm -->
+          <div class="product-card">
+            <!-- Thanh tìm kiếm và lọc -->
+            <div class="product-toolbar">
+              <div class="product-filters">
+                <div class="search-box">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+
+                  <input
+                    type="text"
+                    id="searchProduct"
+                    placeholder="Tìm kiếm sản phẩm..."
+                    oninput="filterProducts()"
+                  />
+                </div>
+
+                <select
+                  class="category-filter"
+                  id="categoryFilter"
+                  onchange="filterProducts()"
+                >
+                  <option value="">Tất cả danh mục</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Bảng sản phẩm -->
+            <div class="table-wrapper">
+              <table class="product-table">
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Phân loại</th>
+                    <th>Giá</th>
+                    <th>Mô tả ngắn</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+
+                <tbody id="productTableBody">
+                  <!-- JavaScript sẽ render sản phẩm từ API tại đây -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Phân trang -->
+            <div class="product-pagination">
+              <p id="productPagination">
+                <!-- JavaScript sẽ render số lượng sản phẩm -->
+              </p>
+
+              <div class="pagination-buttons">
+                <button
+                  type="button"
+                  id="previousPage"
+                  aria-label="Trang trước"
+                  onclick="previousPage()"
+                >
+                  <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <button
+                  type="button"
+                  id="nextPage"
+                  aria-label="Trang tiếp theo"
+                  onclick="nextPage()"
+                >
+                  <i class="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal thêm/sửa sản phẩm -->
+    <!-- hidden -->
+    <div class="modal-overlay" id="productModal" hidden>
+      <div
+        class="modal product-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="productModalTitle"
+      >
+        <!-- Header modal -->
+        <div class="modal-header">
+          <div class="modal-heading">
+            <div class="modal-title-row">
+              <h2 class="modal-title" id="productModalTitle">Thêm sản phẩm</h2>
+            </div>
+
+            <p class="modal-description">
+              Nhập thông tin sản phẩm mới của SNEAKER HUB.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="modal-close"
+            id="btnCloseProductModal"
+            aria-label="Đóng modal"
+            onclick="closeModal('productModal')"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <form
+            class="product-form"
+            id="productForm"
+            onsubmit="handleSubmitProduct(event)"
+          >
+            <!-- Nhóm 1: Thông tin cơ bản -->
+            <fieldset class="form-section">
+              <legend class="form-title">
+                <i class="fa-solid fa-paper-plane"></i>
+                Thông tin cơ bản
+              </legend>
+
+              <div class="form-grid">
+                <!-- Tên sản phẩm -->
+                <div class="form-group">
+                  <div class="form-label-row">
+                    <label for="productName">
+                      Tên sản phẩm <span>*</span>
+                    </label>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="productName"
+                    name="name"
+                    placeholder="Ví dụ: Jordan 1 Retro High OG"
+                  />
+
+                  <small class="form-error" id="productNameError"></small>
+                </div>
+
+                <!-- Alias -->
+                <div class="form-group">
+                  <div class="form-label-row">
+                    <label for="productAlias">
+                      Alias (Slug) <span>*</span>
+                    </label>
+                    <small>Tự động tạo từ tên</small>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="productAlias"
+                    name="alias"
+                    placeholder="Ví dụ: jordan-1-retro-high-og"
+                  />
+
+                  <p class="form-hint">
+                    <i class="fa-solid fa-link"></i>
+                    Alias dùng cho đường dẫn sản phẩm.
+                  </p>
+
+                  <small class="form-error" id="productAliasError"></small>
+                </div>
+
+                <!-- Giá sản phẩm -->
+                <div class="form-group">
+                  <div class="form-label-row">
+                    <label for="productPrice">
+                      Giá sản phẩm <span>*</span>
+                    </label>
+                  </div>
+
+                  <div class="input-suffix">
+                    <input
+                      type="number"
+                      id="productPrice"
+                      name="price"
+                      min="0"
+                      placeholder="Ví dụ: 4500000"
+                    />
+
+                    <span>VNĐ</span>
+                  </div>
+
+                  <small class="form-error" id="productPriceError"></small>
+                </div>
+
+                <!-- Số lượng -->
+                <div class="form-group">
+                  <div class="form-label-row">
+                    <label for="productQuantity">
+                      Số lượng tồn <span>*</span>
+                    </label>
+                  </div>
+
+                  <input
+                    type="number"
+                    id="productQuantity"
+                    name="quantity"
+                    min="0"
+                    placeholder="Ví dụ: 25"
+                  />
+
+                  <small class="form-error" id="productQuantityError"></small>
+                </div>
+
+                <!-- Mô tả ngắn -->
+                <div class="form-group form-group-full">
+                  <div class="form-label-row">
+                    <label for="productShortDescription"> Mô tả ngắn </label>
+                  </div>
+
+                  <input
+                    type="text"
+                    id="productShortDescription"
+                    name="shortDescription"
+                    maxlength="160"
+                    placeholder="Nhập mô tả ngắn gọn của sản phẩm..."
+                  />
+
+                  <div class="form-meta">
+                    <small
+                      class="form-error"
+                      id="shortDescriptionError"
+                    ></small>
+                    <small class="character-count">0/160 ký tự</small>
+                  </div>
+                </div>
+
+                <!-- Mô tả chi tiết -->
+                <div class="form-group form-group-full">
+                  <div class="form-label-row">
+                    <label for="productDescription"> Mô tả chi tiết </label>
+                  </div>
+
+                  <textarea
+                    id="productDescription"
+                    name="description"
+                    rows="5"
+                    placeholder="Nhập thông tin chi tiết về sản phẩm..."
+                  ></textarea>
+
+                  <small
+                    class="form-error"
+                    id="productDescriptionError"
+                  ></small>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Nhóm 2: Kích thước -->
+            <fieldset class="form-section">
+              <legend class="form-title">
+                <i class="fa-solid fa-ruler"></i>
+                Kích thước giày
+              </legend>
+
+              <div class="form-label-row">
+                <label> Chọn các kích thước có sẵn <span>*</span> </label>
+
+                <small>Chọn một hoặc nhiều kích thước</small>
+              </div>
+
+              <div class="size-list" id="productSizeList"></div>
+
+              <input type="hidden" id="productSizes" name="sizes" />
+
+              <p class="form-hint" id="selectedSizeInfo">
+                Chưa chọn kích thước.
+              </p>
+
+              <small class="form-error" id="productSizeError"></small>
+            </fieldset>
+
+            <!-- Nhóm 3: Phân loại -->
+            <fieldset class="form-section">
+              <legend class="form-title">
+                <i class="fa-solid fa-tags"></i>
+                Phân loại sản phẩm
+              </legend>
+
+              <div class="form-label-row">
+                <label> Chọn danh mục <span>*</span> </label>
+              </div>
+
+              <div class="category-list" id="productCategoryList">
+                <!-- JavaScript gọi API và render category tại đây -->
+              </div>
+
+              <small class="form-error" id="productCategoryError"></small>
+            </fieldset>
+
+            <!-- Nhóm 4: Sản phẩm liên quan -->
+            <fieldset class="form-section">
+              <legend class="form-title">
+                <i class="fa-solid fa-shoe-prints"></i>
+                Sản phẩm liên quan
+              </legend>
+
+              <div class="form-label-row">
+                <label for="relatedProductSearch">
+                  Chọn sản phẩm liên quan
+                </label>
+
+                <small>Không bắt buộc</small>
+              </div>
+
+              <div class="related-products">
+                <div class="related-search">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+
+                  <input
+                    type="text"
+                    id="relatedProductSearch"
+                    placeholder="Tìm kiếm sản phẩm theo tên hoặc ID..."
+                    oninput="searchRelatedProducts()"
+                  />
+                </div>
+
+                <div class="related-results" id="relatedProductResults">
+                  <!-- JavaScript render kết quả tìm kiếm -->
+                </div>
+
+                <div class="selected-products" id="selectedRelatedProducts">
+                  <!-- JavaScript render sản phẩm đã chọn -->
+                </div>
+              </div>
+
+              <small class="form-error" id="relatedProductsError"></small>
+            </fieldset>
+
+            <!-- Nhóm 5: Hình ảnh -->
+            <fieldset class="form-section">
+              <legend class="form-title">
+                <i class="fa-regular fa-image"></i>
+                Hình ảnh sản phẩm
+              </legend>
+
+              <div class="image-layout">
+                <div class="image-fields">
+                  <!-- image -->
+                  <div class="form-group">
+                    <div class="form-label-row">
+                      <label for="productImage">
+                        Hình ảnh chính (image) <span>*</span>
+                      </label>
+
+                      <small>URL ảnh chính</small>
+                    </div>
+
+                    <input
+                      type="url"
+                      id="productImage"
+                      name="image"
+                      placeholder="https://images.example.com/product.jpg"
+                      oninput="previewProductImage()"
+                    />
+
+                    <p class="form-hint">
+                      URL hình ảnh chính đại diện cho sản phẩm.
+                    </p>
+
+                    <small class="form-error" id="productImageError"></small>
+                  </div>
+
+                  <!-- imgLink -->
+                  <div class="form-group">
+                    <div class="form-label-row">
+                      <label for="productImgLink">
+                        Liên kết hình ảnh (imgLink) <span>*</span>
+                      </label>
+
+                      <small>CDN hoặc Host URL</small>
+                    </div>
+
+                    <input
+                      type="url"
+                      id="productImgLink"
+                      name="imgLink"
+                      placeholder="https://example.com/cdn/sneaker-link.jpg"
+                      oninput="previewProductImage()"
+                    />
+
+                    <small class="form-error" id="productImgLinkError"></small>
+                  </div>
+                </div>
+
+                <!-- Xem trước ảnh -->
+                <div class="image-group">
+                  <p class="image-title">Xem trước ảnh</p>
+
+                  <div class="image-preview" id="productImagePreview">
+                    <img alt="" id="productPreviewImage" hidden />
+
+                    <div class="image-placeholder" id="productImagePlaceholder">
+                      <i class="fa-regular fa-image"></i>
+                      <span>Chưa có hình ảnh</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn-cancel"
+            id="btnCancelProduct"
+            onclick="closeModal('productModal')"
+          >
+            Hủy
+          </button>
+
+          <button
+            type="submit"
+            form="productForm"
+            class="btn-submit"
+            id="btnSubmitProduct"
+          >
+            <i class="fa-solid fa-plus"></i>
+            <span>Thêm sản phẩm</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <a href="./index.html" class="footer-logo"> SNEAKER HUB </a>
+        <nav class="footer-nav">
+          <a href="#">Information</a>
+          <a href="#">Newsletter</a>
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+        </nav>
+        <p class="footer-copyright">© 2026 SNEAKER HUB. ALL RIGHTS RESERVED.</p>
+      </div>
+    </footer>
+    <!-- axios -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.19.0/axios.min.js"
+      integrity="sha512-1PySIDbtpe3dqJixTAKYVuIJFjhCh6B++coWLFxuQh1es5sQo6eMciiiR8ppJQE4/goMfeJgKZN0ajzWWwuCGg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="./js/pages/modal/modal.js"></script>
+    <script type="module" src="./js/pages/admin/admin.js"></script>
+  </body>
+</html>

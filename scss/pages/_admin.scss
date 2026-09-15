@@ -1,0 +1,383 @@
+.product-management {
+  min-height: calc(100vh - 80px);
+  padding: 40px 0 70px;
+  background-color: $color-background;
+  .product-header {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+    .product-heading {
+      .product-title {
+        margin-bottom: 8px;
+        color: $color-primary;
+        font-family: $font-heading;
+        font-size: 48px;
+        font-weight: 400;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+      .product-description {
+        margin-bottom: 0;
+        color: $color-text-muted;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+    }
+    .btn-add {
+      position: relative;
+      overflow: hidden;
+      min-height: 48px;
+      padding: 12px 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-shrink: 0;
+      // border: 1px solid $color-primary;
+      color: $color-white;
+      background-color: $color-primary;
+      font-family: $font-primary;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition:
+        color $transition-base,
+        background-color $transition-base,
+        transform $transition-base;
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba($color-white, 0.45),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.6s ease;
+      }
+      span {
+        position: relative;
+        z-index: 1;
+      }
+      &:hover {
+        color: $color-white;
+        background-color: $color-accent;
+        box-shadow: 0 8px 20px rgba($color-accent, 0.25);
+        transform: translateY(-2px);
+        &::before {
+          left: 140%;
+        }
+      }
+      &:active {
+        transform: translateY(0) scale(0.98);
+      }
+      i {
+        font-size: 17px;
+      }
+      span {
+        line-height: 1;
+      }
+    }
+  }
+  .product-card {
+    overflow: hidden;
+    border: 1px solid $color-border;
+    background-color: $color-white;
+    border-radius: 4px;
+    .product-toolbar {
+      padding: 24px;
+      border-bottom: 1px solid $color-border;
+      .product-filters {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        .search-box {
+          position: relative;
+          width: 100%;
+          max-width: 440px;
+          i {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            color: $color-text-muted;
+            font-size: 16px;
+            pointer-events: none;
+            transform: translateY(-50%);
+          }
+          input {
+            width: 100%;
+            height: 40px;
+            padding: 0 16px 0 44px;
+            border: 1px solid $color-border;
+            outline: none;
+            background-color: $color-white;
+            color: $color-text;
+            border-radius: 4px;
+            font-family: $font-primary;
+            font-size: 15px;
+            line-height: 1.5;
+            transition:
+              border-color $transition-base,
+              box-shadow $transition-base;
+            &:focus {
+              outline: none;
+              box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+            }
+            &::placeholder {
+              color: $color-text-muted;
+            }
+          }
+        }
+        .category-filter {
+          width: 192px;
+          height: 40px;
+          padding: 0 38px 0 16px;
+          border: 1px solid $color-border;
+          outline: none;
+          color: $color-text;
+          background-color: $color-white;
+          font-family: $font-primary;
+          font-size: 15px;
+          line-height: 1;
+          cursor: pointer;
+          border-radius: 4px;
+          transition:
+            border-color $transition-base,
+            box-shadow $transition-base;
+          &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+          }
+        }
+      }
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      .product-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        color: $color-text;
+        background-color: $color-white;
+
+        // Áp dụng chung cho tiêu đề và dữ liệu
+        th,
+        td {
+          padding: 18px 16px;
+          vertical-align: middle;
+          text-align: left;
+        }
+
+        // Cột STT
+        th:nth-child(1),
+        td:nth-child(1) {
+          width: 70px;
+          text-align: center;
+        }
+
+        // Cột hình ảnh
+        th:nth-child(2),
+        td:nth-child(2) {
+          width: 110px;
+          text-align: center;
+        }
+
+        // Cột tên sản phẩm
+        th:nth-child(3),
+        td:nth-child(3) {
+          width: 230px;
+        }
+
+        // Cột phân loại
+        th:nth-child(4),
+        td:nth-child(4) {
+          width: 145px;
+        }
+
+        // Cột giá
+        th:nth-child(5),
+        td:nth-child(5) {
+          width: 150px;
+        }
+
+        // Cột mô tả chiếm phần còn lại
+        th:nth-child(6),
+        td:nth-child(6) {
+          width: auto;
+        }
+
+        // Cột thao tác
+        th:nth-child(7),
+        td:nth-child(7) {
+          width: 130px;
+          text-align: center;
+        }
+
+        thead {
+          background-color: $color-background;
+
+          th {
+            border-bottom: 1px solid $color-border;
+            color: $color-primary;
+            font-family: $font-primary;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+          }
+        }
+        tbody {
+          tr {
+            transition: background-color $transition-base;
+            &:hover {
+              background-color: $color-background;
+            }
+            &:not(:last-child) {
+              border-bottom: 1px solid $color-border;
+            }
+            td {
+              color: $color-text;
+              font-family: $font-primary;
+              font-size: 14px;
+              line-height: 1.5;
+              .product-image {
+                width: 52px;
+                height: 52px;
+                display: inline-block;
+                border: 1px solid $color-border;
+                border-radius: 4px;
+                object-fit: cover;
+              }
+              .product-name,
+              .product-short-description {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+              .product-name {
+                font-weight: 500;
+              }
+              .category-badge {
+                padding: 4px 9px;
+                display: inline-block;
+                border: 1px solid $color-border;
+                color: $color-text;
+                background-color: $color-background;
+                font-size: 12px;
+                line-height: 1.2;
+              }
+              .product-actions {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                button {
+                  width: 32px;
+                  height: 32px;
+                  padding: 0;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  border: 0;
+                  color: $color-primary;
+                  background-color: transparent;
+                  font-size: 15px;
+                  border-radius: 4px;
+                  cursor: pointer;
+                  transition:
+                    color $transition-base,
+                    background-color $transition-base,
+                    transform $transition-base;
+                }
+                .action-button-edit {
+                  &:hover {
+                    color: $color-white;
+                    background-color: $color-accent;
+                    transform: translateY(-2px);
+                  }
+                }
+                .action-button-delete {
+                  color: $color-danger;
+                  &:hover {
+                    color: $color-white;
+                    background-color: $color-danger-hover;
+                    transform: translateY(-2px);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .product-pagination {
+      min-height: 64px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid $color-border;
+      background-color: $color-white;
+      #productPagination {
+        margin: 0;
+        color: $color-text-muted;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .pagination-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        button {
+          width: 36px;
+          height: 36px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid $color-border;
+          color: $color-primary;
+          background-color: $color-white;
+          font-family: $font-primary;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 1;
+          cursor: pointer;
+          border-radius: 4px;
+          transition:
+            color $transition-base,
+            background-color $transition-base,
+            transform $transition-base;
+          &:hover {
+            color: $color-white;
+            background-color: $color-accent;
+            transform: translateY(-2px);
+          }
+          &:disabled {
+            color: #a3a3a3;
+            border-color: $color-border;
+            background-color: $color-background;
+            cursor: not-allowed;
+          }
+          &:disabled:hover {
+            color: #a3a3a3;
+            border-color: $color-border;
+            background-color: $color-background;
+          }
+        }
+      }
+    }
+  }
+}

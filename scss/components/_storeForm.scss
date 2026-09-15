@@ -1,0 +1,360 @@
+.store-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  .form-section {
+    margin: 0;
+    padding: 24px 0 0;
+    border: 0;
+    .form-title {
+      width: 100%;
+      margin-bottom: 18px;
+      padding: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px dashed $color-border;
+      color: $color-text-muted;
+      background-color: $color-white;
+      font-family: $font-primary;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      i {
+        color: $color-text-muted;
+        font-size: 14px;
+      }
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      .form-group {
+        min-width: 0;
+        &.form-group-full {
+          grid-column: 1/-1;
+        }
+        .form-label-row {
+          min-height: 22px;
+          margin-bottom: 7px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          label {
+            color: $color-text;
+            font-family: $font-primary;
+            font-weight: 700;
+            line-height: 1.4;
+            font-size: 16px;
+            span {
+              color: $color-danger;
+            }
+          }
+          small {
+            color: $color-text-muted;
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 500;
+          }
+        }
+        input,
+        textarea {
+          width: 100%;
+          padding: 0 13px;
+          border: 1px solid $color-border;
+          border-radius: 4px;
+          color: $color-text;
+          background-color: $color-white;
+          font-family: $font-primary;
+          font-size: 14px;
+          transition:
+            border-color $transition-base,
+            box-shadow $transition-base;
+          &::placeholder {
+            color: #a3a3a3;
+          }
+        }
+        input {
+          height: 42px;
+        }
+        textarea {
+          min-height: 120px;
+          padding: 13px;
+          line-height: 1.6;
+          resize: vertical;
+        }
+        .form-hint {
+          margin: 6px 0 0;
+          color: $color-text-muted;
+          font-size: 14px;
+          line-height: 1.5;
+          font-weight: 500;
+        }
+        .form-error {
+          min-height: 16px;
+          margin-top: 4px;
+          display: block;
+          color: $color-danger;
+          font-size: 14px;
+          line-height: 1.4;
+        }
+        .form-meta {
+          margin-top: 4px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          .form-error {
+            margin-top: 0;
+          }
+
+          .character-count {
+            flex-shrink: 0;
+            color: $color-text-muted;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .image-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      align-items: stretch;
+      gap: 20px;
+      .image-fields {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        .form-group {
+          width: 100%;
+          min-width: 0;
+          .form-label-row {
+            min-height: 22px;
+            margin-bottom: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            label {
+              color: $color-text;
+              font-family: $font-primary;
+              font-size: 16px;
+              font-weight: 700;
+              line-height: 1.4;
+              span {
+                color: $color-danger;
+              }
+            }
+            small {
+              color: $color-text-muted;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 1.4;
+            }
+          }
+          input {
+            width: 100%;
+            height: 42px;
+            padding: 0 13px;
+            border: 1px solid $color-border;
+            border-radius: 4px;
+            color: $color-text;
+            background-color: $color-white;
+            font-family: $font-primary;
+            font-size: 14px;
+            &::placeholder {
+              color: #a3a3a3;
+            }
+          }
+          .form-hint {
+            margin: 6px 0 0;
+            color: $color-text-muted;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+          }
+          .form-error {
+            min-height: 16px;
+            margin-top: 4px;
+            display: block;
+            color: $color-danger;
+            font-size: 14px;
+            line-height: 1.4;
+          }
+        }
+      }
+      .image-group {
+        min-width: 0;
+        .image-title {
+          margin: 0 0 8px;
+          color: $color-text;
+          font-size: 16px;
+          font-weight: 700;
+        }
+        .image-preview {
+          width: 100%;
+          min-height: 190px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          overflow: hidden;
+          border: 1px dashed $color-border;
+          border-radius: 4px;
+          color: $color-text-muted;
+          background-color: $color-background;
+          img[hidden] {
+            display: none;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+          .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            color: $color-text-muted;
+            i {
+              font-size: 24px;
+            }
+            span {
+              font-size: 11px;
+            }
+          }
+        }
+      }
+    }
+
+    .store-status {
+      min-height: 76px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border: 1px solid $color-border;
+      border-radius: 4px;
+      background-color: $color-background;
+      cursor: pointer;
+      transition:
+        border-color $transition-base,
+        background-color $transition-base;
+      &:hover {
+        border-color: rgba($color-primary, 0.3);
+      }
+      .store-status-content {
+        min-width: 0;
+        strong {
+          display: block;
+          color: $color-text;
+          font-family: $font-primary;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 1.4;
+        }
+        p {
+          margin: 5px 0 0;
+          color: $color-text-muted;
+          font-family: $font-primary;
+          font-size: 12px;
+          line-height: 1.5;
+        }
+      }
+      .store-status-control {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+        gap: 10px;
+        #storeStatusText {
+          color: $color-success;
+          font-family: $font-primary;
+          font-size: 12px;
+          font-weight: 700;
+          white-space: nowrap;
+          transition: color $transition-base;
+          &.inactive {
+            color: $color-danger;
+          }
+        }
+        #storeActive {
+          position: relative;
+          width: 44px;
+          height: 24px;
+          margin: 0;
+          flex-shrink: 0;
+          border: 0;
+          border-radius: 999px;
+          outline: none;
+          appearance: none;
+          background-color: #bdbdbd;
+          cursor: pointer;
+          transition:
+            background-color $transition-base,
+            box-shadow $transition-base;
+          // Nút tròn bên trong switch
+          &::before {
+            content: "";
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: $color-white;
+            box-shadow: 0 2px 5px rgba($color-primary, 0.2);
+            transition: transform $transition-base;
+          }
+          // Trạng thái
+          &:checked {
+            background-color: $color-success;
+
+            &::before {
+              transform: translateX(20px);
+            }
+          }
+          &:focus-visible {
+            box-shadow: 0 0 0 3px rgba($color-success, 0.2);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .store-form {
+    .form-section {
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .image-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        .image-group {
+          .image-preview {
+            height: 200px;
+          }
+        }
+      }
+      .store-status {
+        align-items: flex-start;
+        flex-direction: column;
+        .store-status-control {
+          width: 100%;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+// Fonts
+$font-primary: "Inter", sans-serif;
+$font-heading: "Bebas Neue", sans-serif;
+
+// Colors
+$color-primary: #111111;
+$color-accent: #ff5a1f;
+
+$color-background: #f7f7f7;
+$color-white: #ffffff;
+
+$color-text: #171717;
+$color-text-muted: #737373;
+
+$color-border: #e5e5e5;
+
+// Trạng thái thành công
+$color-success: #16a34a;
+$color-success-hover: #15803d;
+
+// Trạng thái cảnh báo
+$color-warning: #f59e0b;
+$color-warning-hover: #d97706;
+
+// Trạng thái nguy hiểm hoặc nút xóa
+$color-danger: #dc2626;
+$color-danger-hover: #b91c1c;
+$color-danger-background: #fef2f2;
+
+// Container
+$container-width: 1280px;
+$container-padding: 16px;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Transition
+$transition-base: 0.3s ease;
