@@ -7,3 +7,5 @@ export const PRODUCT_URL = `${BASE_URL}/api/Product`;
 
 // categories
 export const CATEGORIES_URL = `${BASE_URL}/api/Product/getAllCategory`;
+
+export const STORE_URL = `${BASE_URL}/api/Store`;

@@ -721,12 +721,15 @@ h6 {
 .store-management .store-header {
   margin-bottom: 30px;
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
+  justify-content: space-between;
   gap: 24px;
 }
+.store-management .store-header .store-heading {
+  min-width: 0;
+}
 .store-management .store-header .store-heading .store-title {
-  margin-bottom: 8px;
+  margin: 0 0 8px;
   color: #111111;
   font-family: "Bebas Neue", sans-serif;
   font-size: 48px;
@@ -735,21 +738,24 @@ h6 {
   text-transform: uppercase;
 }
 .store-management .store-header .store-heading .store-description {
-  margin-bottom: 0;
+  margin: 0;
   color: #737373;
+  font-family: "Inter", sans-serif;
   font-size: 17px;
   line-height: 1.6;
 }
 .store-management .store-header .btn-add {
   position: relative;
-  overflow: hidden;
   min-height: 48px;
   padding: 12px 20px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   flex-shrink: 0;
+  gap: 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 4px;
   color: #ffffff;
   background-color: #111111;
   font-family: "Inter", sans-serif;
@@ -757,8 +763,7 @@ h6 {
   font-weight: 700;
   letter-spacing: 0.5px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 .store-management .store-header .btn-add::before {
   content: "";
@@ -771,9 +776,16 @@ h6 {
   transform: skewX(-20deg);
   transition: left 0.6s ease;
 }
+.store-management .store-header .btn-add i,
 .store-management .store-header .btn-add span {
   position: relative;
   z-index: 1;
+}
+.store-management .store-header .btn-add i {
+  font-size: 17px;
+}
+.store-management .store-header .btn-add span {
+  line-height: 1;
 }
 .store-management .store-header .btn-add:hover {
   color: #ffffff;
@@ -785,19 +797,14 @@ h6 {
   left: 140%;
 }
 .store-management .store-header .btn-add:active {
+  box-shadow: none;
   transform: translateY(0) scale(0.98);
-}
-.store-management .store-header .btn-add i {
-  font-size: 17px;
-}
-.store-management .store-header .btn-add span {
-  line-height: 1;
 }
 .store-management .store-card {
   overflow: hidden;
   border: 1px solid #e5e5e5;
-  background-color: #ffffff;
   border-radius: 4px;
+  background-color: #ffffff;
 }
 .store-management .store-card .store-toolbar {
   padding: 24px;
@@ -811,7 +818,7 @@ h6 {
 .store-management .store-card .store-toolbar .store-filters .search-box {
   position: relative;
   width: 100%;
-  max-width: 440px;
+  max-width: 500px;
 }
 .store-management .store-card .store-toolbar .store-filters .search-box i {
   position: absolute;
@@ -824,50 +831,48 @@ h6 {
 }
 .store-management .store-card .store-toolbar .store-filters .search-box input {
   width: 100%;
-  height: 40px;
+  height: 44px;
   padding: 0 16px 0 44px;
   border: 1px solid #e5e5e5;
-  outline: none;
-  background-color: #ffffff;
-  color: #171717;
   border-radius: 4px;
+  outline: none;
+  color: #171717;
+  background-color: #ffffff;
   font-family: "Inter", sans-serif;
   font-size: 15px;
   line-height: 1.5;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-.store-management .store-card .store-toolbar .store-filters .search-box input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.2);
-}
 .store-management .store-card .store-toolbar .store-filters .search-box input::placeholder {
   color: #737373;
 }
-.store-management .store-card .store-toolbar .store-filters .category-filter {
-  width: 192px;
-  height: 40px;
-  padding: 0 38px 0 16px;
-  border: 1px solid #e5e5e5;
-  outline: none;
-  color: #171717;
-  background-color: #ffffff;
-  font-family: "Inter", sans-serif;
-  font-size: 15px;
-  line-height: 1;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+.store-management .store-card .store-toolbar .store-filters .search-box input:hover {
+  border-color: rgba(17, 17, 17, 0.35);
 }
-.store-management .store-card .store-toolbar .store-filters .category-filter:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.2);
+.store-management .store-card .store-toolbar .store-filters .search-box input:focus {
+  border-color: #111111;
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.1);
 }
 .store-management .store-card .table-wrapper {
   width: 100%;
   overflow-x: auto;
 }
+.store-management .store-card .table-wrapper::-webkit-scrollbar {
+  height: 7px;
+}
+.store-management .store-card .table-wrapper::-webkit-scrollbar-track {
+  background-color: #f7f7f7;
+}
+.store-management .store-card .table-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #c5c5c5;
+}
+.store-management .store-card .table-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #a3a3a3;
+}
 .store-management .store-card .table-wrapper .store-table {
   width: 100%;
+  min-width: 1100px;
   table-layout: fixed;
   border-collapse: collapse;
   color: #171717;
@@ -886,12 +891,11 @@ h6 {
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(2),
 .store-management .store-card .table-wrapper .store-table td:nth-child(2) {
-  width: 110px;
-  text-align: center;
+  width: 280px;
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(3),
 .store-management .store-card .table-wrapper .store-table td:nth-child(3) {
-  width: 230px;
+  width: 260px;
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(4),
 .store-management .store-card .table-wrapper .store-table td:nth-child(4) {
@@ -899,11 +903,12 @@ h6 {
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(5),
 .store-management .store-card .table-wrapper .store-table td:nth-child(5) {
-  width: 150px;
+  width: 145px;
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(6),
 .store-management .store-card .table-wrapper .store-table td:nth-child(6) {
-  width: auto;
+  width: 170px;
+  text-align: center;
 }
 .store-management .store-card .table-wrapper .store-table th:nth-child(7),
 .store-management .store-card .table-wrapper .store-table td:nth-child(7) {
@@ -914,22 +919,27 @@ h6 {
   background-color: #f7f7f7;
 }
 .store-management .store-card .table-wrapper .store-table thead th {
+  padding-top: 16px;
+  padding-bottom: 16px;
   border-bottom: 1px solid #e5e5e5;
   color: #111111;
   font-family: "Inter", sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
   white-space: nowrap;
 }
 .store-management .store-card .table-wrapper .store-table tbody tr {
+  border-bottom: 1px solid #e5e5e5;
   transition: background-color 0.3s ease;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr:hover {
-  background-color: #f7f7f7;
+.store-management .store-card .table-wrapper .store-table tbody tr:last-child {
+  border-bottom: 0;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr:not(:last-child) {
-  border-bottom: 1px solid #e5e5e5;
+.store-management .store-card .table-wrapper .store-table tbody tr:hover {
+  background-color: rgba(17, 17, 17, 0.025);
 }
 .store-management .store-card .table-wrapper .store-table tbody tr td {
   color: #171717;
@@ -937,65 +947,139 @@ h6 {
   font-size: 14px;
   line-height: 1.5;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-image {
-  width: 52px;
-  height: 52px;
-  display: inline-block;
+.store-management .store-card .table-wrapper .store-table .store-info {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.store-management .store-card .table-wrapper .store-table .store-info .store-image {
+  width: 64px;
+  height: 64px;
+  display: block;
+  flex-shrink: 0;
   border: 1px solid #e5e5e5;
   border-radius: 4px;
+  background-color: #f7f7f7;
   object-fit: cover;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-name,
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-short-description {
+.store-management .store-card .table-wrapper .store-table .store-info .store-info-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.store-management .store-card .table-wrapper .store-table .store-info .store-info-content .store-name {
   overflow: hidden;
+  color: #171717;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-name {
-  font-weight: 500;
-}
-.store-management .store-card .table-wrapper .store-table tbody tr td .category-badge {
-  padding: 4px 9px;
-  display: inline-block;
-  border: 1px solid #e5e5e5;
-  color: #171717;
-  background-color: #f7f7f7;
+.store-management .store-card .table-wrapper .store-table .store-info .store-info-content .store-alias {
+  overflow: hidden;
+  color: #737373;
+  font-family: "Inter", sans-serif;
   font-size: 12px;
-  line-height: 1.2;
+  font-weight: 400;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-actions {
+.store-management .store-card .table-wrapper .store-table .store-address {
+  margin: 0;
+  display: -webkit-box;
+  overflow: hidden;
+  color: #171717;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.store-management .store-card .table-wrapper .store-table .store-coordinate {
+  display: inline-block;
+  color: #737373;
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.store-management .store-card .table-wrapper .store-table .store-status-badge {
+  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.store-management .store-card .table-wrapper .store-table .store-status-badge.active {
+  color: #16a34a;
+  background-color: rgba(22, 163, 74, 0.1);
+}
+.store-management .store-card .table-wrapper .store-table .store-status-badge.inactive {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+.store-management .store-card .table-wrapper .store-table .store-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 10px;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-actions button {
-  width: 32px;
-  height: 32px;
+.store-management .store-card .table-wrapper .store-table .store-actions button {
+  width: 36px;
+  height: 36px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 0;
-  color: #111111;
-  background-color: transparent;
-  font-size: 15px;
+  border: 1px solid transparent;
   border-radius: 4px;
+  background-color: transparent;
+  font-size: 14px;
   cursor: pointer;
-  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-actions .action-button-edit:hover {
+.store-management .store-card .table-wrapper .store-table .store-actions button:hover {
+  transform: translateY(-2px);
+}
+.store-management .store-card .table-wrapper .store-table .store-actions button:active {
+  box-shadow: none;
+  transform: translateY(0) scale(0.96);
+}
+.store-management .store-card .table-wrapper .store-table .store-actions .action-button-edit {
+  color: #111111;
+}
+.store-management .store-card .table-wrapper .store-table .store-actions .action-button-edit:hover {
+  border-color: rgba(255, 90, 31, 0.2);
   color: #ffffff;
   background-color: #ff5a1f;
-  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 90, 31, 0.2);
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-actions .action-button-delete {
+.store-management .store-card .table-wrapper .store-table .store-actions .action-button-delete {
   color: #dc2626;
 }
-.store-management .store-card .table-wrapper .store-table tbody tr td .store-actions .action-button-delete:hover {
+.store-management .store-card .table-wrapper .store-table .store-actions .action-button-delete:hover {
+  border-color: #dc2626;
   color: #ffffff;
-  background-color: #b91c1c;
-  transform: translateY(-2px);
+  background-color: #dc2626;
+  box-shadow: 0 6px 14px rgba(220, 38, 38, 0.2);
+}
+.store-management .store-card .table-wrapper .store-table .table-empty {
+  padding: 40px 20px;
+  color: #737373;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  text-align: center;
 }
 .store-management .store-card .store-pagination {
   min-height: 64px;
@@ -1010,6 +1094,7 @@ h6 {
 .store-management .store-card .store-pagination #storePagination {
   margin: 0;
   color: #737373;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
   line-height: 1.5;
 }
@@ -1021,10 +1106,12 @@ h6 {
 .store-management .store-card .store-pagination .pagination-buttons button {
   width: 36px;
   height: 36px;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #e5e5e5;
+  border-radius: 4px;
   color: #111111;
   background-color: #ffffff;
   font-family: "Inter", sans-serif;
@@ -1032,26 +1119,100 @@ h6 {
   font-weight: 700;
   line-height: 1;
   cursor: pointer;
-  border-radius: 4px;
-  transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
 }
-.store-management .store-card .store-pagination .pagination-buttons button:hover {
+.store-management .store-card .store-pagination .pagination-buttons button:hover:not(:disabled) {
+  border-color: #ff5a1f;
   color: #ffffff;
   background-color: #ff5a1f;
   transform: translateY(-2px);
 }
+.store-management .store-card .store-pagination .pagination-buttons button:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+}
 .store-management .store-card .store-pagination .pagination-buttons button:disabled {
-  color: #a3a3a3;
   border-color: #e5e5e5;
+  color: #a3a3a3;
   background-color: #f7f7f7;
   cursor: not-allowed;
 }
-.store-management .store-card .store-pagination .pagination-buttons button:disabled:hover {
-  color: #a3a3a3;
-  border-color: #e5e5e5;
-  background-color: #f7f7f7;
-}
 
+@media (max-width: 768px) {
+  .store-management {
+    padding: 30px 0 50px;
+  }
+  .store-management .store-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .store-management .store-header .store-heading .store-title {
+    font-size: 40px;
+  }
+  .store-management .store-header .store-heading .store-description {
+    font-size: 15px;
+  }
+  .store-management .store-header .btn-add {
+    width: 100%;
+  }
+  .store-management .store-card .store-toolbar {
+    padding: 16px;
+  }
+  .store-management .store-card .store-toolbar .store-filters {
+    width: 100%;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .store-management .store-card .store-toolbar .store-filters .search-box {
+    max-width: none;
+  }
+  .store-management .store-card .store-pagination {
+    padding: 14px 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .store-management .store-card .store-pagination .pagination-buttons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+@media (max-width: 576px) {
+  .store-management {
+    padding: 24px 0 40px;
+  }
+  .store-management .store-header {
+    margin-bottom: 22px;
+  }
+  .store-management .store-header .store-heading .store-title {
+    font-size: 36px;
+  }
+  .store-management .store-header .store-heading .store-description {
+    font-size: 14px;
+  }
+  .store-management .store-card .store-toolbar {
+    padding: 14px;
+  }
+  .store-management .store-card .store-toolbar .store-filters .search-box input {
+    height: 42px;
+    font-size: 14px;
+  }
+  .store-management .store-card .table-wrapper .store-table th,
+  .store-management .store-card .table-wrapper .store-table td {
+    padding: 14px 12px;
+  }
+  .store-management .store-card .table-wrapper .store-table .store-info {
+    gap: 10px;
+  }
+  .store-management .store-card .table-wrapper .store-table .store-info .store-image {
+    width: 54px;
+    height: 54px;
+  }
+  .store-management .store-card .store-pagination #storePagination {
+    font-size: 12px;
+  }
+}
 .modal-overlay {
   position: fixed;
   inset: 0;
