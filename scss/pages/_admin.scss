@@ -381,3 +381,200 @@
     }
   }
 }
+
+// Responsive
+@media (max-width: $breakpoint-md) {
+  .product-management {
+    padding: 32px 0 56px;
+
+    .product-header {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 20px;
+
+      .product-heading {
+        .product-title {
+          font-size: 40px;
+        }
+
+        .product-description {
+          font-size: 15px;
+        }
+      }
+
+      .btn-add {
+        width: 100%;
+      }
+    }
+
+    .product-card {
+      .product-toolbar {
+        padding: 20px;
+
+        .product-filters {
+          align-items: stretch;
+          flex-direction: column;
+          gap: 12px;
+
+          .search-box {
+            max-width: none;
+          }
+
+          .category-filter {
+            width: 100%;
+          }
+        }
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        .product-table {
+          // Giữ đủ chiều rộng để bảng không bị ép
+          min-width: 1000px;
+
+          th,
+          td {
+            padding: 16px 14px;
+          }
+        }
+      }
+
+      .product-pagination {
+        padding: 14px 20px;
+      }
+    }
+  }
+}
+
+// ========================================
+// RESPONSIVE MOBILE
+
+@media (max-width: $breakpoint-sm) {
+  .product-management {
+    padding: 24px 0 40px;
+    .product-header {
+      margin-bottom: 20px;
+      gap: 16px;
+      .product-heading {
+        .product-title {
+          margin-bottom: 6px;
+          font-size: 34px;
+        }
+        .product-description {
+          font-size: 14px;
+          line-height: 1.5;
+        }
+      }
+      .btn-add {
+        min-height: 44px;
+        padding: 11px 16px;
+        font-size: 13px;
+      }
+    }
+    .product-card {
+      .product-toolbar {
+        padding: 16px;
+        .product-filters {
+          gap: 10px;
+          .search-box {
+            i {
+              left: 14px;
+              font-size: 14px;
+            }
+            input {
+              height: 42px;
+              padding: 0 14px 0 40px;
+              font-size: 14px;
+            }
+          }
+          .category-filter {
+            height: 42px;
+            padding: 0 36px 0 14px;
+            font-size: 14px;
+          }
+        }
+      }
+      .table-wrapper {
+        .product-table {
+          min-width: 900px;
+          th,
+          td {
+            padding: 14px 12px;
+          }
+          th:nth-child(1),
+          td:nth-child(1) {
+            width: 56px;
+          }
+          th:nth-child(2),
+          td:nth-child(2) {
+            width: 90px;
+          }
+          th:nth-child(3),
+          td:nth-child(3) {
+            width: 190px;
+          }
+          th:nth:nth-child(4),
+          td:nth-child(4) {
+            width: 130px;
+          }
+          th:nth-child(5),
+          td:nth-child(5) {
+            width: 130px;
+          }
+          th:nth-child(6),
+          td:nth-child(6) {
+            width: 220px;
+          }
+          th:nth-child(7),
+          td:nth-child(7) {
+            width: 110px;
+          }
+          thead {
+            th {
+              font-size: 12px;
+            }
+          }
+          tbody {
+            tr {
+              td {
+                font-size: 13px;
+                .product-image {
+                  width: 46px;
+                  height: 46px;
+                }
+                .product-actions {
+                  gap: 8px;
+                  button {
+                    width: 30px;
+                    height: 30px;
+                    font-size: 13px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .product-pagination {
+        min-height: auto;
+        padding: 14px 16px;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        #productPagination {
+          font-size: 13px;
+          text-align: center;
+        }
+        .pagination-buttons {
+          justify-content: center;
+          button {
+            width: 34px;
+            height: 34px;
+          }
+        }
+      }
+    }
+  }
+}

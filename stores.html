@@ -81,6 +81,7 @@
                     type="text"
                     id="searchstore"
                     placeholder="Tìm kiếm kiếm cửa hàng theo tên hoặc địa chỉ..."
+                    oninput="filterStores()"
                   />
                 </div>
               </div>
@@ -117,7 +118,7 @@
                 <button
                   type="button"
                   id="previousPage"
-                  aria-label="Trang trước"
+                  onclick="previousPage()"
                   disabled
                 >
                   <i class="fa-solid fa-chevron-left"></i>
@@ -126,7 +127,7 @@
                 <button
                   type="button"
                   id="nextPage"
-                  aria-label="Trang tiếp theo"
+                  onclick="nextPage()"
                   disabled
                 >
                   <i class="fa-solid fa-chevron-right"></i>

@@ -1,5 +1,5 @@
 export class StoreType {
-  constructor(data = {}) {
+  constructor(data) {
     this.id = data.id;
     this.name = data.name;
     this.alias = data.alias;
@@ -7,5 +7,6 @@ export class StoreType {
     this.longtitude = data.longtitude;
     this.description = data.description;
     this.image = data.image;
+    this.deleted = data.deleted;
   }
 }

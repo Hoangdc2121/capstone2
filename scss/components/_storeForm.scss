@@ -208,7 +208,8 @@
           border-radius: 4px;
           color: $color-text-muted;
           background-color: $color-background;
-          img[hidden] {
+          img[hidden],
+          .image-placeholder[hidden] {
             display: none;
           }
           img {

@@ -1,143 +1,129 @@
-import { getStore, addStore } from "../../services/storeService.js";
+import {
+  getStore,
+  addStore,
+  updateStore,
+  deleteStore,
+} from "../../services/storeService.js";
 
-// Danh sách cửa hàng
-let stores = [];
+import { paginate } from "../../utils/pagination.js";
 
-// DOM helper
+// DOM
 let dom = (selector) => {
   return document.querySelector(selector);
 };
 
-// ================================
-// HÌNH ẢNH
-// ================================
+// Trạng thái cửa hàng
+let stores = [];
+let filteredStores = [];
+let currentPage = 1;
+let pageSize = 10;
+let formMode = "create";
+let editingStoreId = null;
 
+// Cấu hình hình ảnh
 const STORE_IMAGE_PREFIX = "https://apistore.cybersoft.edu.vn/images/";
+const STORE_PLACEHOLDER = "https://placehold.co/80x80?text=No+Image";
 
-const STORE_PLACEHOLDER =
-  "https://placehold.co/80x80/f5f5f5/737373?text=No+Image";
-
-let getStoreImageUrl = (image) => {
+// XỬ LÝ URL ẢNH
+let cleanStoreImageUrl = (image) => {
   let imageUrl = String(image || "").trim();
 
-  // Không có hình hoặc API trả chuỗi mặc định
-  if (imageUrl === "" || imageUrl.toLowerCase() === "string") {
-    return STORE_PLACEHOLDER;
-  }
-
-  // API nối sai đường dẫn:
+  // Xử lý URL bị API nối sai:
   // /images/https://images.unsplash.com/...
   while (imageUrl.startsWith(STORE_IMAGE_PREFIX + "http")) {
     imageUrl = imageUrl.replace(STORE_IMAGE_PREFIX, "");
   }
+  return imageUrl;
+};
 
+let getStoreImageUrl = (image) => {
+  let imageUrl = cleanStoreImageUrl(image);
+  if (!imageUrl || imageUrl.toLowerCase() === "string") {
+    return STORE_PLACEHOLDER;
+  }
   // URL đầy đủ
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
     return imageUrl;
   }
-
   // API chỉ trả tên file
   return STORE_IMAGE_PREFIX + imageUrl;
 };
 
-// ================================
 // MỞ MODAL THÊM CỬA HÀNG
-// ================================
-
 window.openCreateStoreModal = () => {
-  let storeForm = dom("#storeForm");
-  let submitText = dom("#btnSubmitStore span");
-  let storeActive = dom("#storeActive");
-
-  storeForm.reset();
-
-  // Trạng thái mặc định: đang hoạt động
-  storeActive.checked = true;
-
-  submitText.textContent = "Thêm cửa hàng";
-
+  formMode = "create";
+  editingStoreId = null;
+  resetStoreForm();
+  dom("#storeModalTitle").textContent = "THÊM CỬA HÀNG";
+  dom("#btnSubmitStore span").textContent = "Thêm cửa hàng";
   window.openModal("storeModal");
 };
 
-// ================================
 // RENDER DANH SÁCH CỬA HÀNG
-// ================================
-
-let renderStore = (data) => {
+let renderStores = () => {
   let storeTableBody = dom("#storeTableBody");
-
   if (!storeTableBody) {
     console.error("Không tìm thấy #storeTableBody");
-
     return;
   }
-
-  if (!Array.isArray(data) || data.length === 0) {
-    storeTableBody.innerHTML = `
-      <tr>
-        <td colspan="7" class="table-empty">
-          Không có cửa hàng nào.
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-  let content = data
+  let pagination = paginate(filteredStores, currentPage, pageSize);
+  let content = pagination.currentItems
     .map((item, index) => {
-      let imageUrl = getStoreImageUrl(item.image);
-
-      let statusText = item.deleted ? "Ngừng hoạt động" : "Đang hoạt động";
-
-      let statusClass = item.deleted ? "inactive" : "active";
-
+      let {
+        id,
+        name,
+        alias,
+        latitude,
+        longtitude,
+        description,
+        image,
+        deleted,
+      } = item;
+      let storeImage = getStoreImageUrl(image);
+      let isDeleted = deleted === true || deleted === "true" || deleted === 1;
+      let statusText = isDeleted ? "Ngừng hoạt động" : "Đang hoạt động";
+      let statusClass = isDeleted ? "inactive" : "active";
       return `
         <tr>
-          <td>${index + 1}</td>
-
+          <td>
+            ${pagination.startIndex + index + 1}
+          </td>
           <td>
             <div class="store-info">
               <img
-                src="${imageUrl}"
-                alt="${item.name || "Cửa hàng"}"
+                src="${storeImage}"
+                alt="${name || "Cửa hàng"}"
                 class="store-image"
                 onerror="
                   this.onerror = null;
                   this.src = '${STORE_PLACEHOLDER}';
                 "
               />
-
               <div class="store-info-content">
                 <strong class="store-name">
-                  ${item.name || "Chưa có tên"}
+                  ${name || "Chưa có tên"}
                 </strong>
-
                 <span class="store-alias">
-                  ${item.alias || "Chưa có alias"}
+                  ${alias || "Chưa có alias"}
                 </span>
               </div>
             </div>
           </td>
-
           <td>
             <p class="store-address">
-              ${item.description || "Chưa có địa chỉ"}
+              ${description || "Chưa có địa chỉ"}
             </p>
           </td>
-
           <td>
             <span class="store-coordinate">
-              ${item.latitude || "—"}
+              ${latitude || "—"}
             </span>
           </td>
-
           <td>
             <span class="store-coordinate">
-              ${item.longtitude || "—"}
+              ${longtitude || "—"}
             </span>
           </td>
-
           <td>
             <span
               class="store-status-badge ${statusClass}"
@@ -145,23 +131,21 @@ let renderStore = (data) => {
               ${statusText}
             </span>
           </td>
-
           <td>
             <div class="store-actions">
               <button
                 type="button"
                 class="action-button-edit"
-                aria-label="Chỉnh sửa cửa hàng"
-                onclick="openEditStoreModal(${item.id})"
+                aria-label="Sửa cửa hàng"
+                onclick="editStore(${id})"
               >
                 <i class="fa-solid fa-pen"></i>
               </button>
-
               <button
                 type="button"
                 class="action-button-delete"
                 aria-label="Xóa cửa hàng"
-                onclick="handleDeleteStore(${item.id})"
+                onclick="handleDeleteStore(${id})"
               >
                 <i class="fa-regular fa-trash-can"></i>
               </button>
@@ -171,108 +155,327 @@ let renderStore = (data) => {
       `;
     })
     .join("");
-
+  if (pagination.totalItems === 0) {
+    content = `
+      <tr>
+        <td
+          colspan="7"
+          class="table-empty"
+        >
+          Không có cửa hàng nào.
+        </td>
+      </tr>
+    `;
+  }
   storeTableBody.innerHTML = content;
+  renderStorePagination(pagination);
 };
 
-// ================================
-// LẤY VÀ RENDER DANH SÁCH
-// ================================
+// RENDER PHÂN TRANG
 
-let initStore = async () => {
-  try {
-    stores = await getStore();
-
-    console.log("👉 Danh sách cửa hàng:", stores);
-
-    renderStore(stores);
-  } catch (err) {
-    console.log("👉 Lỗi tải danh sách cửa hàng:", err);
-
-    stores = [];
-
-    renderStore(stores);
+let renderStorePagination = (pagination) => {
+  let paginationInfo = dom("#storePagination");
+  let previousButton = dom("#previousPage");
+  let nextButton = dom("#nextPage");
+  if (paginationInfo) {
+    paginationInfo.innerHTML = `
+      Hiển thị ${pagination.startItem} -
+      ${pagination.endItem}
+      của ${pagination.totalItems}
+      cửa hàng
+    `;
+  }
+  if (previousButton) {
+    previousButton.disabled = currentPage <= 1;
+  }
+  if (nextButton) {
+    nextButton.disabled =
+      pagination.totalPages === 0 || currentPage >= pagination.totalPages;
   }
 };
 
-// ================================
-// THÊM CỬA HÀNG
-// ================================
+// Trang trước
+window.previousPage = () => {
+  if (currentPage <= 1) {
+    return;
+  }
+  currentPage--;
+  renderStores();
+};
 
-window.handleSubmitStore = async (event) => {
-  event.preventDefault();
+// Trang tiếp theo
+window.nextPage = () => {
+  let pagination = paginate(filteredStores, currentPage, pageSize);
+  if (currentPage >= pagination.totalPages) {
+    return;
+  }
+  currentPage++;
+  renderStores();
+};
 
-  let name = dom("#storeName").value.trim();
-  let alias = dom("#storeAlias").value.trim();
-  let latitude = dom("#storeLatitude").value.trim();
-  let longtitude = dom("#storeLongitude").value.trim();
+// TÌM KIẾM CỬA HÀNG
+window.filterStores = () => {
+  let searchValue = dom("#searchstore").value.trim().toLowerCase();
+  filteredStores = stores.filter((item) => {
+    let storeName = String(item.name || "").toLowerCase();
+    let storeAlias = String(item.alias || "").toLowerCase();
+    let storeDescription = String(item.description || "").toLowerCase();
+    let storeId = String(item.id || "").toLowerCase();
+    let storeLatitude = String(item.latitude || "").toLowerCase();
+    let storeLongtitude = String(item.longtitude || "").toLowerCase();
+    return (
+      storeName.includes(searchValue) ||
+      storeAlias.includes(searchValue) ||
+      storeDescription.includes(searchValue) ||
+      storeId.includes(searchValue) ||
+      storeLatitude.includes(searchValue) ||
+      storeLongtitude.includes(searchValue)
+    );
+  });
 
-  let description = dom("#storeDescription").value.trim();
+  currentPage = 1;
+  renderStores();
+};
 
-  let image = dom("#storeImage").value.trim();
-  let storeActive = dom("#storeActive").checked;
+// TRẠNG THÁI TOGGLE
+window.changeStoreStatus = () => {
+  let storeActive = dom("#storeActive");
+  let storeStatusText = dom("#storeStatusText");
+  if (!storeActive || !storeStatusText) {
+    return;
+  }
+  if (storeActive.checked) {
+    storeStatusText.textContent = "Đang hoạt động";
+    storeStatusText.classList.remove("inactive");
+  } else {
+    storeStatusText.textContent = "Ngừng hoạt động";
+    storeStatusText.classList.add("inactive");
+  }
+};
 
-  // Kiểm tra thông tin bắt buộc
-  if (!name || !alias || !latitude || !longtitude) {
-    alert("Vui lòng nhập đầy đủ tên, alias, vĩ độ và kinh độ!");
+// XEM TRƯỚC ẢNH
+window.previewStoreImage = () => {
+  let imageUrl = cleanStoreImageUrl(dom("#storeImage").value);
+
+  let previewImage = dom("#storePreviewImage");
+
+  let placeholder = dom("#storeImagePlaceholder");
+
+  if (!previewImage || !placeholder) {
+    return;
+  }
+
+  if (!imageUrl) {
+    previewImage.removeAttribute("src");
+    previewImage.style.display = "none";
+
+    placeholder.style.display = "flex";
 
     return;
   }
 
-  let storeData = {
-    id: 0,
-    name,
-    alias,
-    latitude,
-
-    // API sử dụng tên longtitude
-    longtitude,
-
-    description,
-    image,
-
-    // Toggle bật = hoạt động = deleted false
-    deleted: !storeActive,
+  previewImage.onload = () => {
+    previewImage.style.display = "block";
+    placeholder.style.display = "none";
   };
 
-  console.log("👉 Dữ liệu chuẩn bị thêm:", storeData);
+  previewImage.onerror = () => {
+    previewImage.removeAttribute("src");
+    previewImage.style.display = "none";
 
+    placeholder.style.display = "flex";
+  };
+
+  previewImage.src = getStoreImageUrl(imageUrl);
+};
+
+// TẢI LẠI DANH SÁCH
+let reloadStores = async (preserveSearch = true) => {
+  stores = await getStore();
+  if (!Array.isArray(stores)) {
+    stores = [];
+  }
+  if (preserveSearch) {
+    window.filterStores();
+    return;
+  }
+  let searchInput = dom("#searchstore");
+  if (searchInput) {
+    searchInput.value = "";
+  }
+  filteredStores = [...stores];
+  currentPage = 1;
+  renderStores();
+};
+
+// RESET FORM
+let resetStoreForm = () => {
+  let storeForm = dom("#storeForm");
+
+  if (storeForm) {
+    storeForm.reset();
+  }
+
+  let storeActive = dom("#storeActive");
+
+  if (storeActive) {
+    storeActive.checked = true;
+  }
+
+  let storeStatusText = dom("#storeStatusText");
+
+  if (storeStatusText) {
+    storeStatusText.textContent = "Đang hoạt động";
+
+    storeStatusText.classList.remove("inactive");
+  }
+
+  let previewImage = dom("#storePreviewImage");
+
+  let placeholder = dom("#storeImagePlaceholder");
+
+  if (previewImage) {
+    previewImage.removeAttribute("src");
+    previewImage.style.display = "none";
+  }
+
+  if (placeholder) {
+    placeholder.style.display = "flex";
+  }
+};
+
+// SUBMIT THÊM HOẶC CHỈNH SỬA
+
+window.handleSubmitStore = async (event) => {
+  event.preventDefault();
+  let isUpdating = formMode === "update";
+  let payload = {
+    id: isUpdating ? Number(editingStoreId) : 0,
+    name: dom("#storeName").value.trim(),
+    alias: dom("#storeAlias").value.trim(),
+    latitude: dom("#storeLatitude").value.trim(),
+    longtitude: dom("#storeLongitude").value.trim(),
+    description: dom("#storeDescription").value.trim(),
+    image: cleanStoreImageUrl(dom("#storeImage").value),
+    deleted: !dom("#storeActive").checked,
+  };
+  if (
+    !payload.name ||
+    !payload.alias ||
+    !payload.latitude ||
+    !payload.longtitude
+  ) {
+    alert("Vui lòng nhập đầy đủ tên, alias, vĩ độ và kinh độ!");
+    return;
+  }
+  let confirmMessage = isUpdating
+    ? `Bạn có chắc muốn cập nhật cửa hàng "${payload.name}" không?`
+    : `Bạn có chắc muốn thêm cửa hàng "${payload.name}" không?`;
+  let isConfirmed = window.confirm(confirmMessage);
+  if (!isConfirmed) {
+    return;
+  }
+
+  // console.log("👉 Payload gửi API:", payload);
   let submitButton = dom("#btnSubmitStore");
-
   try {
-    // Chặn bấm submit nhiều lần
     submitButton.disabled = true;
-
-    let response = await addStore(storeData);
-
-    console.log("👉 Kết quả thêm cửa hàng:", response);
-
-    alert("Thêm cửa hàng thành công!");
-
-    dom("#storeForm").reset();
-
+    if (isUpdating) {
+      await updateStore(payload);
+    } else {
+      await addStore(payload);
+    }
+    await reloadStores(false);
+    resetStoreForm();
+    formMode = "create";
+    editingStoreId = null;
     window.closeModal("storeModal");
-
-    // Lấy lại danh sách mới nhất
-    await initStore();
+    alert(
+      isUpdating
+        ? "Cập nhật cửa hàng thành công!"
+        : "Thêm cửa hàng thành công!",
+    );
   } catch (err) {
-    console.error("👉 Toàn bộ lỗi:", err);
+    console.error("👉 Lỗi lưu cửa hàng:", err.response?.data || err);
+    console.log("👉 Payload:", payload);
     console.log("👉 Status:", err.response?.status);
-    console.log("👉 Data lỗi:", err.response?.data);
-
-    let errorMessage =
-      err.response?.data?.message ||
+    alert(
       err.response?.data?.content ||
-      "Thêm cửa hàng thất bại!";
-
-    alert(errorMessage);
+        err.response?.data?.message ||
+        err.message ||
+        (isUpdating
+          ? "Cập nhật cửa hàng thất bại!"
+          : "Thêm cửa hàng thất bại!"),
+    );
   } finally {
     submitButton.disabled = false;
   }
 };
 
-// ================================
+// MỞ MODAL CHỈNH SỬA
+window.editStore = (storeId) => {
+  let store = stores.find((item) => {
+    return Number(item.id) === Number(storeId);
+  });
+  if (!store) {
+    alert("Không tìm thấy cửa hàng!");
+    return;
+  }
+  resetStoreForm();
+  formMode = "update";
+  editingStoreId = Number(store.id);
+  dom("#storeModalTitle").textContent = "CHỈNH SỬA CỬA HÀNG";
+  dom("#btnSubmitStore span").textContent = "Lưu thay đổi";
+  dom("#storeName").value = store.name || "";
+  dom("#storeAlias").value = store.alias || "";
+  dom("#storeLatitude").value = store.latitude || "";
+  dom("#storeLongitude").value = store.longtitude || "";
+  dom("#storeDescription").value = store.description || "";
+  dom("#storeImage").value = cleanStoreImageUrl(store.image);
+  dom("#storeActive").checked = store.deleted !== true;
+  window.changeStoreStatus();
+  window.previewStoreImage();
+  console.log("👉 Cửa hàng đang chỉnh sửa:", store);
+  window.openModal("storeModal");
+};
+
+// XÓA CỬA HÀNG
+window.handleDeleteStore = async (storeId) => {
+  let store = stores.find((item) => {
+    return Number(item.id) === Number(storeId);
+  });
+  let storeName = store?.name || `ID ${storeId}`;
+  let isConfirmed = window.confirm(
+    `Bạn có chắc muốn xóa cửa hàng "${storeName}" không?`,
+  );
+  if (!isConfirmed) {
+    return;
+  }
+  try {
+    await deleteStore(storeId);
+    await reloadStores(true);
+    alert("Xóa cửa hàng thành công!");
+  } catch (err) {
+    console.error("👉 Lỗi xóa cửa hàng:", err.response?.data || err);
+    alert(
+      err.response?.data?.content ||
+        err.response?.data?.message ||
+        err.message ||
+        "Xóa cửa hàng thất bại!",
+    );
+  }
+};
+
 // KHỞI TẠO TRANG
-// ================================
+let initStore = async () => {
+  try {
+    await reloadStores(false);
+  } catch (err) {
+    console.error("👉 Lỗi tải danh sách:", err);
+    stores = [];
+    filteredStores = [];
+    renderStores();
+  }
+};
 
 initStore();
