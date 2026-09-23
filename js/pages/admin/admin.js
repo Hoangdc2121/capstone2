@@ -18,6 +18,7 @@ let pageSize = 10;
 let filteredProducts = [];
 let categories = [];
 let selectedRelatedProductIds = [];
+let selectedSizes = [];
 let formMode = "create";
 let editingProductId = null;
 
@@ -36,11 +37,12 @@ window.openCreateProductModal = () => {
 
 // Lấy các size đang có class active
 let getSelectedSizes = () => {
-  return Array.from(
+  let selectedSizes = Array.from(
     document.querySelectorAll("#productForm .size-option.active"),
   ).map((button) => {
     return Number(button.dataset.size);
   });
+  return [...new Set(selectedSizes)];
 };
 
 // Lấy các category đang có class active
@@ -234,16 +236,24 @@ window.filterProducts = () => {
   renderProducts();
 };
 
-// thêm sản phẩm
 // hàm chọn size
 window.toggleSize = (button) => {
-  button.classList.toggle("active");
-  let selectedSizes = getSelectedSizes();
+  let size = Number(button.dataset.size);
+  if (selectedSizes.includes(size)) {
+    selectedSizes = selectedSizes.filter((item) => {
+      return item !== size;
+    });
+  } else {
+    selectedSizes.push(size);
+  }
+  selectedSizes = [...new Set(selectedSizes)];
+  button.classList.toggle("active", selectedSizes.includes(size));
   dom("#productSizes").value = JSON.stringify(selectedSizes);
-  dom("#selectedSizeInfo").innerHTML =
+  dom("#selectedSizeInfo").textContent =
     selectedSizes.length > 0
       ? `Đã chọn: ${selectedSizes.join(", ")}`
       : "Chưa chọn kích thước.";
+  // console.log("👉 Size đang chọn:", selectedSizes);
 };
 
 // Chuyển size dạng mảng hoặc chuỗi từ API thành mảng số hợp lệ
@@ -266,7 +276,6 @@ let parseProductSizes = (sizeData) => {
         .filter(Number.isFinite);
     }
   }
-
   return [];
 };
 
@@ -496,17 +505,20 @@ let reloadProducts = async (preserveFilters = true) => {
 
 // hàm reset
 let resetProductForm = () => {
+  selectedSizes = [];
   dom("#productForm").reset();
+  document.querySelectorAll("#productForm .size-option").forEach((button) => {
+    button.classList.remove("active");
+  });
   document
-    .querySelectorAll("#productForm .size-option.active")
+    .querySelectorAll("#productForm .category-option")
     .forEach((button) => {
       button.classList.remove("active");
     });
-  document
-    .querySelectorAll("#productForm .category-option.active")
-    .forEach((button) => {
-      button.classList.remove("active");
-    });
+  let productSizesInput = dom("#productSizes");
+  if (productSizesInput) {
+    productSizesInput.value = "";
+  }
   selectedRelatedProductIds = [];
   let relatedSearch = dom("#relatedProductSearch");
   let relatedResults = dom("#relatedProductResults");
@@ -520,10 +532,10 @@ let resetProductForm = () => {
   let selectedSizeInfo = dom("#selectedSizeInfo");
   let selectedCategoryInfo = dom("#selectedCategoryInfo");
   if (selectedSizeInfo) {
-    selectedSizeInfo.innerHTML = "Chưa chọn kích thước.";
+    selectedSizeInfo.textContent = "Chưa chọn kích thước.";
   }
   if (selectedCategoryInfo) {
-    selectedCategoryInfo.innerHTML = "Chưa chọn phân loại.";
+    selectedCategoryInfo.textContent = "Chưa chọn phân loại.";
   }
   let previewImage = dom("#productPreviewImage");
   let placeholder = dom("#productImagePlaceholder");
@@ -539,7 +551,6 @@ let resetProductForm = () => {
 // hàm submit
 window.handleSubmitProduct = async (event) => {
   event.preventDefault();
-  let selectedSizes = getSelectedSizes();
   let selectedCategories = getSelectedCategories();
   let isUpdating = formMode === "update";
   let payload = {
@@ -548,8 +559,7 @@ window.handleSubmitProduct = async (event) => {
     alias: dom("#productAlias").value.trim(),
     price: Number(dom("#productPrice").value),
     description: dom("#productDescription").value.trim(),
-    size: selectedSizes,
-    sizes: selectedSizes.join(","),
+    size: JSON.stringify(selectedSizes),
     shortDescription: dom("#productShortDescription").value.trim(),
     quantity: Number(dom("#productQuantity").value),
     categories: selectedCategories,
@@ -564,7 +574,7 @@ window.handleSubmitProduct = async (event) => {
   if (!isConfirmed) {
     return;
   }
-  console.log("👉 Payload gửi lên API:", payload);
+  // console.log("👉 Payload gửi lên API:", payload);
   try {
     if (isUpdating) {
       await updateProduct(payload);
@@ -618,27 +628,24 @@ window.editProduct = (productId) => {
 
 // hàm lấy lại kích thước cho phần chỉnh sửa
 let fillProductSize = (product) => {
-  let productSizes = [];
-  if (Array.isArray(product.sizes)) {
-    productSizes = product.sizes.map(Number);
-  } else if (Array.isArray(product.size)) {
-    productSizes = product.size.map(Number);
-  } else {
-    productSizes = parseProductSizes(product.sizes || product.size);
-  }
+  selectedSizes = [...new Set(parseProductSizes(product.size))];
   document.querySelectorAll("#productForm .size-option").forEach((button) => {
     let buttonSize = Number(button.dataset.size);
-    button.classList.toggle("active", productSizes.includes(buttonSize));
+    button.classList.toggle("active", selectedSizes.includes(buttonSize));
   });
-  dom("#productSizes").value = JSON.stringify(productSizes);
+  let productSizesInput = dom("#productSizes");
+  if (productSizesInput) {
+    productSizesInput.value = JSON.stringify(selectedSizes);
+  }
   let selectedSizeInfo = dom("#selectedSizeInfo");
   if (selectedSizeInfo) {
     selectedSizeInfo.textContent =
-      productSizes.length > 0
-        ? `Đã chọn: ${productSizes.join(", ")}`
+      selectedSizes.length > 0
+        ? `Đã chọn: ${selectedSizes.join(", ")}`
         : "Chưa chọn kích thước.";
   }
-  console.log("👉 Size lấy được:", productSizes);
+  // console.log("👉 Size API trả về:", product.size);
+  // console.log("👉 Size dùng khi chỉnh sửa:", selectedSizes);
 };
 
 // hàm lấy loại sản phẩm cho phần chỉnh sửa
