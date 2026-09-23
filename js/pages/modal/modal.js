@@ -1,17 +1,13 @@
 let dom = (selector) => {
   return document.querySelector(selector);
 };
-
-let openModal = (modalId) => {
+window.openModal = (modalId) => {
   let modal = dom(`#${modalId}`);
-
   if (!modal) return;
-
   modal.hidden = false;
   document.body.classList.add("modal-open");
 };
-
-let closeModal = (modalId) => {
+window.closeModal = (modalId) => {
   let modal = dom(`#${modalId}`);
 
   if (!modal) return;
@@ -19,6 +15,5 @@ let closeModal = (modalId) => {
   modal.hidden = true;
   document.body.classList.remove("modal-open");
 };
-
-window.openModal = openModal;
-window.closeModal = closeModal;
+// window.openModal = openModal;
+// window.closeModal = closeModal;

@@ -172,7 +172,6 @@ let renderStores = () => {
 };
 
 // RENDER PHÂN TRANG
-
 let renderStorePagination = (pagination) => {
   let paginationInfo = dom("#storePagination");
   let previousButton = dom("#previousPage");
@@ -256,36 +255,26 @@ window.changeStoreStatus = () => {
 // XEM TRƯỚC ẢNH
 window.previewStoreImage = () => {
   let imageUrl = cleanStoreImageUrl(dom("#storeImage").value);
-
   let previewImage = dom("#storePreviewImage");
-
   let placeholder = dom("#storeImagePlaceholder");
-
   if (!previewImage || !placeholder) {
     return;
   }
-
   if (!imageUrl) {
     previewImage.removeAttribute("src");
     previewImage.style.display = "none";
-
     placeholder.style.display = "flex";
-
     return;
   }
-
   previewImage.onload = () => {
     previewImage.style.display = "block";
     placeholder.style.display = "none";
   };
-
   previewImage.onerror = () => {
     previewImage.removeAttribute("src");
     previewImage.style.display = "none";
-
     placeholder.style.display = "flex";
   };
-
   previewImage.src = getStoreImageUrl(imageUrl);
 };
 
@@ -311,41 +300,30 @@ let reloadStores = async (preserveSearch = true) => {
 // RESET FORM
 let resetStoreForm = () => {
   let storeForm = dom("#storeForm");
-
   if (storeForm) {
     storeForm.reset();
   }
-
   let storeActive = dom("#storeActive");
-
   if (storeActive) {
     storeActive.checked = true;
   }
-
   let storeStatusText = dom("#storeStatusText");
-
   if (storeStatusText) {
     storeStatusText.textContent = "Đang hoạt động";
-
     storeStatusText.classList.remove("inactive");
   }
-
   let previewImage = dom("#storePreviewImage");
-
   let placeholder = dom("#storeImagePlaceholder");
-
   if (previewImage) {
     previewImage.removeAttribute("src");
     previewImage.style.display = "none";
   }
-
   if (placeholder) {
     placeholder.style.display = "flex";
   }
 };
 
 // SUBMIT THÊM HOẶC CHỈNH SỬA
-
 window.handleSubmitStore = async (event) => {
   event.preventDefault();
   let isUpdating = formMode === "update";
@@ -477,5 +455,4 @@ let initStore = async () => {
     renderStores();
   }
 };
-
 initStore();

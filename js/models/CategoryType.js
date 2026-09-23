@@ -4,9 +4,7 @@ export class CategoryType {
     this.category = data.category || "";
     this.alias = data.alias || "";
     this.deleted = data.deleted ?? false;
-
     this.categoryParent = this.parseJsonArray(data.categoryParent);
-
     this.categoryChild = this.parseJsonArray(data.categoryChild);
 
     this.productList = this.parseJsonArray(data.productList);

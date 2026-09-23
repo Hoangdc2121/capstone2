@@ -49,12 +49,10 @@
           <div class="store-header">
             <div class="store-heading">
               <h1 class="store-title">Quản lý cửa hàng</h1>
-
               <p class="store-description">
                 Thêm, chỉnh sửa và quản lý hệ thống cửa hàng của SNEAKER HUB.
               </p>
             </div>
-
             <button
               type="button"
               class="btn-add"
@@ -63,7 +61,6 @@
             >
               <!-- openModal('storeModal') dùng khi nào cần mở modal  -->
               <!-- onclick="openCreateStoreModal()" -->
-
               <i class="fa-solid fa-plus"></i>
               <span>Thêm cửa hàng</span>
             </button>
@@ -76,7 +73,6 @@
               <div class="store-filters">
                 <div class="search-box">
                   <i class="fa-solid fa-magnifying-glass"></i>
-
                   <input
                     type="text"
                     id="searchstore"
@@ -101,19 +97,13 @@
                     <th>Thao tác</th>
                   </tr>
                 </thead>
-
-                <tbody id="storeTableBody">
-                  <!-- JavaScript sẽ render sản phẩm từ API tại đây -->
-                </tbody>
+                <tbody id="storeTableBody"></tbody>
               </table>
             </div>
 
             <!-- Phân trang -->
             <div class="store-pagination">
-              <p id="storePagination">
-                <!-- JavaScript sẽ render số lượng sản phẩm -->
-              </p>
-
+              <p id="storePagination"></p>
               <div class="pagination-buttons">
                 <button
                   type="button"
@@ -123,7 +113,6 @@
                 >
                   <i class="fa-solid fa-chevron-left"></i>
                 </button>
-
                 <button
                   type="button"
                   id="nextPage"
@@ -154,12 +143,10 @@
             <div class="modal-title-row">
               <h2 class="modal-title" id="storeModalTitle">Thêm cửa hàng</h2>
             </div>
-
             <p class="modal-description" id="storeModalDescription">
               Nhập thông tin cửa hàng mới của SNEAKER HUB.
             </p>
           </div>
-
           <button
             type="button"
             class="modal-close"
@@ -184,14 +171,12 @@
                 <i class="fa-solid fa-store"></i>
                 Thông tin cơ bản
               </legend>
-
               <div class="form-grid">
                 <!-- Tên cửa hàng -->
                 <div class="form-group">
                   <div class="form-label-row">
                     <label for="storeName"> Tên cửa hàng <span>*</span> </label>
                   </div>
-
                   <input
                     type="text"
                     id="storeName"
@@ -199,7 +184,6 @@
                     placeholder="Ví dụ: SNEAKER HUB Quận 1"
                     required
                   />
-
                   <small class="form-error" id="storeNameError"></small>
                 </div>
 
@@ -209,7 +193,6 @@
                     <label for="storeAlias">
                       Alias (Slug) <span>*</span>
                     </label>
-
                     <small>Tự động tạo từ tên</small>
                   </div>
 
@@ -220,12 +203,10 @@
                     placeholder="Ví dụ: sneaker-hub-quan-1"
                     required
                   />
-
                   <p class="form-hint">
                     <i class="fa-solid fa-link"></i>
                     Alias dùng cho đường dẫn cửa hàng.
                   </p>
-
                   <small class="form-error" id="storeAliasError"></small>
                 </div>
 
@@ -235,10 +216,8 @@
                     <label for="storeLatitude">
                       Vĩ độ (Latitude) <span>*</span>
                     </label>
-
                     <small>Tọa độ GPS</small>
                   </div>
-
                   <input
                     type="text"
                     id="storeLatitude"
@@ -246,7 +225,6 @@
                     placeholder="Ví dụ: 10.776889"
                     required
                   />
-
                   <small class="form-error" id="storeLatitudeError"></small>
                 </div>
 
@@ -256,10 +234,8 @@
                     <label for="storeLongitude">
                       Kinh độ (Longitude) <span>*</span>
                     </label>
-
                     <small>Tọa độ GPS</small>
                   </div>
-
                   <input
                     type="text"
                     id="storeLongitude"
@@ -267,7 +243,6 @@
                     placeholder="Ví dụ: 106.700806"
                     required
                   />
-
                   <small class="form-error" id="storeLongitudeError"></small>
                 </div>
 
@@ -276,7 +251,6 @@
                   <div class="form-label-row">
                     <label for="storeDescription"> Mô tả cửa hàng </label>
                   </div>
-
                   <textarea
                     id="storeDescription"
                     name="description"
@@ -290,7 +264,6 @@
                       class="form-error"
                       id="storeDescriptionError"
                     ></small>
-
                     <small class="character-count" id="storeDescriptionCount">
                       0/500 ký tự
                     </small>
@@ -305,7 +278,6 @@
                 <i class="fa-regular fa-image"></i>
                 Hình ảnh cửa hàng
               </legend>
-
               <div class="image-layout">
                 <div class="image-fields">
                   <div class="form-group">
@@ -313,10 +285,8 @@
                       <label for="storeImage">
                         Hình ảnh cửa hàng <span>*</span>
                       </label>
-
                       <small>URL hình ảnh</small>
                     </div>
-
                     <input
                       type="url"
                       id="storeImage"
@@ -325,9 +295,7 @@
                       oninput="previewStoreImage()"
                       required
                     />
-
                     <p class="form-hint">URL hình ảnh đại diện cho cửa hàng.</p>
-
                     <small class="form-error" id="storeImageError"></small>
                   </div>
                 </div>
@@ -335,14 +303,12 @@
                 <!-- Xem trước ảnh -->
                 <div class="image-group">
                   <p class="image-title">Xem trước ảnh</p>
-
                   <div class="image-preview" id="storeImagePreview">
                     <img
                       alt="Xem trước cửa hàng"
                       id="storePreviewImage"
                       hidden
                     />
-
                     <div class="image-placeholder" id="storeImagePlaceholder">
                       <i class="fa-regular fa-image"></i>
                       <span>Chưa có hình ảnh</span>
@@ -358,19 +324,15 @@
                 <i class="fa-solid fa-sliders"></i>
                 Trạng thái cửa hàng
               </legend>
-
               <label class="store-status">
                 <div class="store-status-content">
                   <strong>Trạng thái cửa hàng</strong>
-
                   <p id="storeStatusDescription">
                     Cửa hàng đang được hiển thị trên hệ thống.
                   </p>
                 </div>
-
                 <div class="store-status-control">
                   <span id="storeStatusText"></span>
-
                   <input
                     type="checkbox"
                     id="storeActive"
